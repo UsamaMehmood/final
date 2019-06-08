@@ -1,0 +1,34 @@
+#register .wrapper {
+  background-image: url("../img/marvin-meyer-571072-unsplash.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  height: 100%;
+}
+#register .wrapper .background-pink {
+  background-color: rgba(216, 27, 96, 0.7);
+  padding: 40px 0;
+  height: 100%;
+}
+#register .wrapper .background-pink .container {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+#register .wrapper .background-pink .container .row .registration-page-title {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  margin: 40px 0;
+  font-size: 2.5rem;
+}
+#register .wrapper .background-pink .container .row .registration-page-paragraph {
+  color: white;
+}
+#register .wrapper .background-pink .container .row .left-pane {
+  padding: 100px 15px;
+}
+#register .wrapper .background-pink .container .row .right-pane {
+  margin: 5px 0px;
+}
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,113 @@
+.post-container {
+  background-color: white;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  margin-bottom: 20px;
+
+  .poster-info {
+    .poster-content {
+      display: block;
+      margin-top: -40px;
+      margin-left: 50px;
+
+      .poster-name {
+        color: rgba(0, 0, 0, 0.8);
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
+
+        :hover {
+          color: black;
+        }
+      }
+
+      .poster-location {
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 12px;
+      }
+    }
+  }
+
+  .main-post {
+    .post-caption {
+      margin: 10px 0;
+    }
+
+    .post-img {
+      width: 100%;
+      height: auto;
+    }
+
+    .texted-post {
+      font-size: 3em;
+      margin: 10px 0;
+    }
+  }
+
+  .post-details {
+    margin-top: 10px;
+
+    .post-likes {
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    .post-shares {
+      color: rgba(0, 0, 0, 0.7);
+      float: right;
+    }
+  }
+
+  .post-actions {
+    margin: 10px 0;
+    text-align: center;
+
+    .post-action-button {
+      width: 32.5%;
+      border: none;
+      background-color: white;
+      color: blue;
+      outline: none;
+    }
+
+    .is-liked {
+      color: rgba(216, 27, 96, 1) !important;
+    }
+  }
+
+  .comments-section {
+    .my-comment {
+      display: none;
+      .write-comment {
+        display: inline-block;
+        width: 91%;
+        border: 1px solid rgba(0, 0, 0, 0.6);
+        background-color: white;
+        border-radius: 50px;
+        padding: 8px 20px;
+        outline: none;
+      }
+    }
+
+    .comments {
+      margin-top: 15px;
+
+      .comment {
+        margin-top: 5px;
+
+        .comment-content {
+          background-color: rgba(0, 0, 0, 0.05);
+          padding: 10px;
+          border-radius: 5px;
+          margin-top: -40px;
+          margin-left: 45px;
+
+          .commenter-name {
+            font-weight: bold;
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{% load static %}
+<h5 class="friends-suggestion-title">Friends suggestions</h5>
+{% for friend in suggested_friends %}
+<div class="friend-suggestion">
+    <img src="{{ friend.image.url }}" class="circle-small" alt="{{ friend.name }}">
+    <a class="friend-name" href="#">{{ friend.name }}</a>
+</div>
+{% endfor %}
+<div class="more-friends"><a href="{% url 'core:friends-suggestions' %}">More</a></div>

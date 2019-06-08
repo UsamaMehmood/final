@@ -1,0 +1,81 @@
+#dashboard {
+  background-color: rgba(0, 0, 0, 0.05);
+
+  .main-section {
+    position: relative;
+    margin-top: 70px;
+
+    .posts-container {
+      padding: 15px;
+
+      .write-post {
+        border-radius: 5px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        margin-bottom: 25px;
+        padding: 10px;
+        background-color: white;
+
+        .post-avatar {
+          margin-top: -35px;
+        }
+
+        .post {
+          max-height: 200px;
+          overflow: auto;
+          margin-bottom: 15px;
+          outline: none;
+          font-size: 16px;
+        }
+      }
+    }
+
+    .others-container {
+      padding: 15px;
+
+      .friends-suggestions-container {
+        border-radius: 5px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        margin-bottom: 25px;
+        padding: 10px;
+        background-color: white;
+
+        .friends-suggestion-title {
+          color: rgba(0,0,0,0.7);
+          font-weight: bold;
+        }
+
+        .friend-suggestion {
+          padding: 5px 10px;
+
+          .friend-name {
+            font-weight: bold;
+            padding-left: 5px;
+          }
+        }
+
+        .more-friends {
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .share-message {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+}
+
+.modal-header {
+  .modal-title {
+    font-size: 18px;
+    color: rgba(0,0,0,0.7);
+    font-weight: bold;
+  }
+  .close {
+    margin-top: -25px !important;
+  }
+}

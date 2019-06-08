@@ -1,0 +1,34 @@
+#friendsSuggestion {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+#friendsSuggestion .main-section {
+  margin-top: 70px;
+  position: relative;
+}
+#friendsSuggestion .main-section .main-suggestions {
+  margin-top: 15px;
+}
+#friendsSuggestion .main-section .main-suggestions .nearby-friends,
+#friendsSuggestion .main-section .main-suggestions .friends-of-friends {
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  margin-bottom: 25px;
+  padding: 10px;
+  background-color: white;
+}
+#friendsSuggestion .main-section .main-suggestions .nearby-friends h3,
+#friendsSuggestion .main-section .main-suggestions .friends-of-friends h3 {
+  margin-bottom: 20px;
+}
+#friendsSuggestion .main-section .main-suggestions .nearby-friends .friend_suggestion,
+#friendsSuggestion .main-section .main-suggestions .friends-of-friends .friend_suggestion {
+  margin: 25px 0;
+}
+#friendsSuggestion .main-section .main-suggestions .nearby-friends .profile-link,
+#friendsSuggestion .main-section .main-suggestions .friends-of-friends .profile-link {
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+}
+/*# sourceMappingURL=friends-suggestions.css.map */

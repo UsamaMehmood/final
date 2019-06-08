@@ -1,0 +1,54 @@
+{% extends 'skeleton/base.html' %}
+{% load static %}
+{% block body_id %}friendsSuggestion{% endblock %}
+{% block page_title %}Friends suggestions - {{ PROJECT_NAME }}{% endblock %}
+{% block page_styles %}
+    <link rel="stylesheet" href="{% static 'css/friends-suggestions.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+{% block content %}
+    {% include 'components/header.html' %}
+    <div class="container main-section">
+        <div class="row">
+            <div class="col-md-3 profile-section-container">
+                {% include 'components/profile.html' %}
+            </div>
+            <div class="col-md-9 main-suggestions">
+                <div class="nearby-friends">
+                    <h3>Nearby friends</h3>
+                    {% for friend in nearby_friends %}
+                        <div class="friend_suggestion">
+                        <span class="left-side">
+                            <img src="{{ friend.image.url }}" alt="{{ friend.name }}" class="circle-small">
+                            <a href="#" class="profile-link">{{ friend.name }}</a>
+                            <span class="location">{{ friend.city }}, {{ friend.country }}</span>
+                        </span>
+                            <button class="button-pink to-right friend_request_button" data-from="{{ user.pk }}"
+                                    data-to="{{ friend.pk }}">Send request
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% if friends_of_friends %}
+                <div class="friends-of-friends">
+                    <h3>Friends of friends</h3>
+                    {% for friend in friends_of_friends %}
+                        <div class="friend_suggestion">
+                        <span class="left-side">
+                            <img src="{{ friend.image.url }}" alt="{{ friend.name }}" class="circle-small">
+                            <a href="#" class="profile-link">{{ friend.name }}</a>
+                            <span class="location">{{ friend.city }}, {{ friend.country }}</span>
+                        </span>
+                            <button class="button-pink to-right friend_request_button" data-from="{{ user.pk }}"
+                                    data-to="{{ friend.pk }}">Send request
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

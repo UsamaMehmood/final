@@ -1,0 +1,38 @@
+.profile-section-container {
+  padding: 15px;
+}
+.profile-section-container .dashboard-profile {
+  background: white;
+  border-radius: 5px;
+  padding-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.profile-section-container .dashboard-profile .profile-background {
+  top: 0;
+  left: 0;
+  height: 85px;
+  background-color: #d81b60;
+  width: 100%;
+}
+.profile-section-container .dashboard-profile .profile-foreground {
+  text-align: center;
+  margin-top: -50px;
+}
+.profile-section-container .dashboard-profile .profile-foreground .profile-name {
+  font-weight: bold;
+}
+.profile-section-container .dashboard-profile .profile-foreground .profile-link {
+  font-weight: bold;
+  cursor: pointer;
+}
+.profile-section-container .dashboard-profile .profile-foreground .profile-friends {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: bold;
+  margin-top: 40px;
+}
+.profile-section-container .dashboard-profile .profile-foreground .profile-location {
+  color: rgba(0, 0, 0, 0.4);
+}
+/*# sourceMappingURL=sidebar.css.map */

@@ -1,0 +1,206 @@
+{% extends 'skeleton/base.html' %}
+{% load static %}
+{% load extras %}
+{% block page_title %}Dashboard - {{ user.name }}{% endblock %}
+{% block page_styles %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+{% block body_id %}dashboard{% endblock %}
+
+{% block content %}
+    {% include 'components/header.html' %}
+    <div class="container main-section">
+        <div class="row">
+            <div class="col-md-3 profile-section-container">
+                {% include 'components/profile.html' %}
+            </div>
+            <div class="col-md-6 posts-container">
+                <div class="write-post" id="top">
+                    <img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">
+                    <div contenteditable class="post" id="caption">Write a post...</div>
+                    <input type="file" style="display: none" id="file_upload">
+                    <input type="radio" name="status" class="status" value="public" id="public" checked> <label
+                        for="public">Public</label>
+                    <input type="radio" name="status" class="status" value="private" id="private"> <label for="private">Private</label>
+                    <br>
+                    <button class="button-pink" onclick="uploadFile()">Upload image</button>
+                    <button class="button-pink" id="createPost">Post</button>
+                </div>
+                {% for post in posts %}
+                    <div class="post-container">
+                        <div class="poster-info">
+                            <img src="{{ post.poster.image.url }}" class="circle-small post-avatar"
+                                 alt="{{ post.poster.name }}">
+                            <span class="poster-content">
+            <a class="poster-name">{{ post.poster.name }}</a><br/><span
+                                    class="poster-location">{{ post.poster.city }}, {{ post.poster.country }}</span>
+          </span>
+                        </div>
+                        <div class="main-post">
+                            {% if post.post_image %}
+                                <div class="post-caption">{{ post.caption }}</div>
+                                <img src="{{ post.post_image.url }}" alt="post" class="post-img">
+                            {% else %}
+                                <div class="texted-post">{{ post.caption }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="post-details">
+                            <span class="post-likes">{{ post.likes.count }} Like(s)</span>
+                            <span class="post-shares">{{ post.shares.count }} Share(s)</span>
+                        </div>
+                        <div class="post-actions">
+                            <button class="post-action-button like {% if post|liked_by_user:user %}is-liked{% endif %}"
+                                    data-post-id="{{ post.pk }}"><i class="fas fa-thumbs-up"></i> Like
+                            </button>
+                            <button class="post-action-button comment" data-post-id="{{ post.pk }}"><i
+                                    class="fas fa-comments"></i> Comment
+                            </button>
+                            <button class="post-action-button share" data-toggle="modal" data-target="#sharePostModal"
+                                    data-post-id="{{ post.pk }}"><i
+                                    class="fas fa-share"></i> Share
+                            </button>
+                        </div>
+                        <div class="comments-section">
+                            <div class="my-comment">
+                                <img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">
+                                <input class="write-comment" type="text" placeholder="write a comment"
+                                       data-post-id="{{ post.id }}">
+                            </div>
+                            <div class="comments">
+                                {% for comment in post.comments.all %}
+                                    <div class="comment">
+                                        <img src="{{ comment.commenter.image.url }}" class="circle-small post-avatar"
+                                             alt="profile">
+                                        <div class="comment-content">
+                                            <a class="commenter-name" href="#">{{ comment.commenter.name }}</a>
+                                            <span class="comment-message">{{ comment.message }}</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if suggested_friends.count > 0 %}
+                <div class="col-md-3 others-container">
+                    <div class="friends-suggestions-container">
+                        {% include 'components/friends-sugestions.html' %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block page_scripts %}
+
+    <script>
+        $(document).ready(function () {
+            $("#createPost").on("click", function (e) {
+                var caption = $("#caption").text();
+                var file = $("#file_upload")[0].files[0];
+                var status = $("input[name='status']:checked").val();
+                if (file !== undefined && file.type.indexOf("image") >= 0) {
+                    var fileReader = new FileReader();
+                    fileReader.onload = function (fileLoadedEvent) {
+                        file = fileReader.result;
+                    };
+                    fileReader.readAsDataURL(file);
+                } else {
+                    file = "";
+                }
+                if (caption === "Write a post..." || caption === "") {
+                    return;
+                }
+
+                setTimeout(function () {
+                    $.ajax({
+                        url: "{% url 'core:api:create-post' %}",
+                        type: "POST",
+                        data: {caption: caption, image: file, status: status, post_by: "{{ user.pk }}"},
+                        success: function () {
+                            $("#caption").text("Write a post...");
+                            location.reload();
+                        }
+                    })
+                }, 1000);
+            });
+            $(".like").on('click', function (e) {
+                var elem = $(e.target);
+                var post_id = elem.data("post-id");
+                if (elem.hasClass('is-liked')) {
+                    elem.removeClass('is-liked');
+                    $.ajax({
+                        url: "{% url 'core:api:unlike-post' %}",
+                        type: "post",
+                        data: {
+                            post_id: post_id,
+                            user_id: "{{ user.pk }}",
+                        },
+                        success: function (data) {
+                            showAlert("You Unliked the post");
+                        }
+                    });
+                } else {
+                    elem.addClass("is-liked");
+                    $.ajax({
+                        url: "{% url 'core:api:like-post' %}",
+                        type: "post",
+                        data: {
+                            post_id: post_id,
+                            user_id: "{{ user.pk }}",
+                        },
+                        success: function (data) {
+                            showAlert("You liked the post");
+                        }
+                    });
+                }
+            });
+            $(".comment").on("click", function (e) {
+                var elem = $(e.target);
+                elem.parent().parent().find($(".my-comment")).css("display", "block");
+            })
+            $(".write-comment").keypress(function (e) {
+                if (e.which === 13) {
+                    var elem = $(e.target);
+                    var comment = elem.val();
+                    var post_id = elem.data("post-id");
+                    elem.val("");
+                    elem.parent().css("display", "none");
+                    var comment_section = elem.parent().parent().find($(".comments"));
+                    var html = '<div class="comment">';
+                    html += '<img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">';
+                    html += '<div class="comment-content">';
+                    html += '<a class="commenter-name" href="#">{{ user.name }} </a>';
+                    html += '<span class="comment-message">' + comment + '</span>';
+                    html += '</div></div>';
+                    html = html + comment_section.html();
+                    comment_section.html(html);
+                    $.ajax({
+                        url: "{% url 'core:api:comment-post' %}",
+                        type: "post",
+                        data: {
+                            message: comment,
+                            post_id: post_id,
+                            user_id: "{{ user.pk }}",
+                        },
+                        success: function () {
+                            showAlert("You commented on the post")
+                        }
+                    });
+                    return false;
+                }
+            });
+            $(".share").on("click", function (e) {
+                var post_id = $(e.target).data("post-id");
+                $("#post_id").val(post_id);
+            });
+        })
+    </script>
+
+{% endblock %}

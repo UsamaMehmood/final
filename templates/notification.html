@@ -1,0 +1,181 @@
+{% extends 'skeleton/base.html' %}
+{% load static %}
+{% load extras %}
+{% block page_title %}Notification - {{ user.name }}{% endblock %}
+{% block body_id %}notification{% endblock %}
+{% block page_styles %}
+    <link rel="stylesheet" href="{% static 'css/notification.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include 'components/header.html' %}
+    <div class="container main-section">
+        <div class="row">
+            <div class="col-md-3 profile-section-container">
+                {% include 'components/profile.html' %}
+            </div>
+            <div class="col-md-6 notifications {% if notification.type == "friend_request" %}notifications-container{% endif %}">
+                {% if notification.type == "friend_request" %}
+                    <div class="friend_request"><img class="circle-small" src="{{ notification.by.image.url }}"
+                                                     alt="{{ notification.by.name }}">
+                        <a class="profile-link" href="#">{{ notification.by.name }}</a> sent you a friend request
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="approved" name="status" hidden>
+                        <input type="submit" value="Approve" class="button-pink">
+                    </form>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="decline" name="status" hidden>
+                        <input type="submit" value="Decline" class="button-pink">
+                    </form>
+                {% else %}
+                    <div class="post-container">
+                        <div class="poster-info">
+                            <img src="{{ notification.post_id.poster.image.url }}" class="circle-small post-avatar"
+                                 alt="{{ notification.post_id.poster.name }}">
+                            <span class="poster-content">
+            <a class="poster-name">{{ notification.post_id.poster.name }}</a><br/><span
+                                    class="poster-location">{{ notification.post_id.poster.city }}, {{ notification.post_id.poster.country }}</span>
+          </span>
+                        </div>
+                        <div class="main-post">
+                            {% if notification.post_id.post_image %}
+                                <div class="post-caption">{{ notification.post_id.caption }}</div>
+                                <img src="{{ notification.post_id.post_image.url }}" alt="post" class="post-img">
+                            {% else %}
+                                <div class="texted-post">{{ notification.post_id.caption }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="post-details">
+                            <span class="post-likes">{{ notification.post_id.likes.count }} Like(s)</span>
+                            <span class="post-shares">{{ notification.post_id.shares.count }} Share(s)</span>
+                        </div>
+                        <div class="post-actions">
+                            <button class="post-action-button like {% if notification.post_id|liked_by_user:user %}is-liked{% endif %}"
+                                    data-post-id="{{ notification.post_id.pk }}"><i class="fas fa-thumbs-up"></i> Like
+                            </button>
+                            <button class="post-action-button comment" data-post-id="{{ notification.post_id.pk }}"><i
+                                    class="fas fa-comments"></i> Comment
+                            </button>
+                            <button class="post-action-button share" data-toggle="modal"
+                                    data-target="#sharePostModal"
+                                    data-post-id="{{ notification.post_id.pk }}"><i
+                                    class="fas fa-share"></i> Share
+                            </button>
+                        </div>
+                        <div class="comments-section">
+                            <div class="my-comment">
+                                <img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">
+                                <input class="write-comment" type="text" placeholder="write a comment"
+                                       data-post-id="{{ notification.post_id.id }}">
+                            </div>
+                            <div class="comments">
+                                {% for comment in notification.post_id.comments.all %}
+                                    <div class="comment">
+                                        <img src="{{ comment.commenter.image.url }}" class="circle-small post-avatar"
+                                             alt="profile">
+                                        <div class="comment-content">
+                                            <a class="commenter-name" href="#">{{ comment.commenter.name }}</a>
+                                            <span class="comment-message">{{ comment.message }}</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            {% if suggested_friends.count > 0 %}
+                <div class="col-md-3 others-container">
+                    <div class="friends-suggestions-container">
+                        {% include 'components/friends-sugestions.html' %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_scripts %}
+
+    <script>
+        $(document).ready(function () {
+            $(".like").on('click', function (e) {
+                var elem = $(e.target);
+                var post_id = elem.data("post-id");
+                if (elem.hasClass('is-liked')) {
+                    elem.removeClass('is-liked');
+                    $.ajax({
+                        url: "{% url 'core:api:unlike-post' %}",
+                        type: "post",
+                        data: {
+                            post_id: post_id,
+                            user_id: "{{ user.pk }}",
+                        },
+                        success: function (data) {
+                            showAlert("You Unliked the post");
+                        }
+                    });
+                } else {
+                    elem.addClass("is-liked");
+                    $.ajax({
+                        url: "{% url 'core:api:like-post' %}",
+                        type: "post",
+                        data: {
+                            post_id: post_id,
+                            user_id: "{{ user.pk }}",
+                        },
+                        success: function (data) {
+                            showAlert("You liked the post");
+                        }
+                    });
+                }
+            });
+            $(".comment").on("click", function (e) {
+                var elem = $(e.target);
+                elem.parent().parent().find($(".my-comment")).css("display", "block");
+            })
+            $(".write-comment").keypress(function (e) {
+                if (e.which === 13) {
+                    var elem = $(e.target);
+                    var comment = elem.val();
+                    var post_id = elem.data("post-id");
+                    elem.val("");
+                    elem.parent().css("display", "none");
+                    var comment_section = elem.parent().parent().find($(".comments"));
+                    var html = '<div class="comment">';
+                    html += '<img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">';
+                    html += '<div class="comment-content">';
+                    html += '<a class="commenter-name" href="#">{{ user.name }} </a>';
+                    html += '<span class="comment-message">' + comment + '</span>';
+                    html += '</div></div>';
+                    html = html + comment_section.html();
+                    comment_section.html(html);
+                    $.ajax({
+                        url: "{% url 'core:api:comment-post' %}",
+                        type: "post",
+                        data: {
+                            message: comment,
+                            post_id: post_id,
+                            user_id: "{{ user.pk }}",
+                        },
+                        success: function () {
+                            showAlert("You commented on the post")
+                        }
+                    });
+                    return false;
+                }
+            });
+            $(".share").on("click", function (e) {
+                var post_id = $(e.target).data("post-id");
+                $("#post_id").val(post_id);
+            });
+        })
+    </script>
+
+{% endblock %}

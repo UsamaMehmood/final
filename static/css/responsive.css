@@ -1,0 +1,12 @@
+@media screen and (max-width: 1200px) {
+  #dashboard .write-comment {
+    width: 89% !important;
+  }
+}
+@media screen and (max-width: 490px) {
+  #dashboard .write-comment {
+    width: 100% !important;
+    margin-top: 10px;
+  }
+}
+/*# sourceMappingURL=responsive.css.map */

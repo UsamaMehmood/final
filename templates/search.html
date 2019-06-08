@@ -1,0 +1,49 @@
+{% extends 'skeleton/base.html' %}
+{% load static %}
+{% block page_title %}{{ search_query }} - Search Results{% endblock %}
+{% block body_id %}search{% endblock %}
+{% block page_styles %}
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include 'components/header.html' %}
+    <div class="container main-section">
+        <div class="row">
+            <div class="col-md-3 profile-section-container">
+                {% include 'components/profile.html' %}
+            </div>
+            <div class="col-md-6 search-results-section">
+                <h3>Search results</h3>
+                {% for friend in search_results %}
+                    <div class="friend_suggestion">
+                        <span class="left-side">
+                            <img src="{{ friend.image.url }}" alt="{{ friend.name }}" class="circle-small">
+                            <a href="#" class="profile-link">{{ friend.name }}</a>
+                            <span class="location">{{ friend.city }}, {{ friend.country }}</span>
+                        </span>
+                        {% if not friend.pk in user_friends %}
+                            <button class="button-pink to-right friend_request_button" data-from="{{ user.pk }}"
+                                    data-to="{{ friend.pk }}">Send request
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_scripts %}
+
+    <script>
+        $(".friend_request_button").click(function (e) {
+            e.preventDefault();
+            send_friend_request(e.target, "{% url 'core:api:send_friend_request' %}");
+        })
+    </script>
+
+{% endblock %}

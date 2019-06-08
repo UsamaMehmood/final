@@ -1,0 +1,60 @@
+.velyria-form {
+  background-color: white;
+  padding: 30px 15px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.velyria-form .registration-form-title {
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-family: 'Montserrat', sans-serif;
+}
+.velyria-form .form-field {
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  padding: 10px;
+  transition: 0.3s ease-in-out;
+  margin: 10px;
+}
+.velyria-form .form-field .field-label {
+  position: absolute;
+  top: 10px;
+  font-weight: 200;
+  transition: 0.3s ease-in-out;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.velyria-form .form-field .field {
+  outline: none;
+  font-size: 18px;
+  border: none;
+  font-family: 'Roboto', sans-serif;
+  display: block;
+  width: 100%;
+}
+.is-filled {
+  border: 1px solid #d81b60 !important;
+}
+.is-filled .field-label {
+  font-size: 14px !important;
+  top: -10px !important;
+  background-color: white;
+  color: #d81b60 !important;
+}
+.button-pink {
+  border: none;
+  background-color: #d81b60;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 10px 50px;
+  border-radius: 5px;
+}
+.margin-left-10 {
+  margin-left: 10px;
+}
+.to-right {
+  float: right;
+}
+/*# sourceMappingURL=form.css.map */

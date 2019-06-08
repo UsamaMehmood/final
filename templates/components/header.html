@@ -1,0 +1,139 @@
+{% load static %}
+<div class="velyria-navbar-container">
+    <div class="nav-left-content">
+        <form method="post" action="{% url 'core:search-results' %}">
+            {% csrf_token %}
+            <input type="text" placeholder="search with name, city or country" id="search-Field" name="query">
+            <button class="circle-small pink"><i class="fas fa-search"></i></button>
+        </form>
+        <div class="search-results">
+
+        </div>
+    </div>
+    <div class="nav-right-content">
+        <button class="circle-small pink"><a href="{% url 'core:dashboard' %}"><i class="fas fa-house-damage"></i></a>
+        </button>
+        <span class="dropdown">
+      <button class="circle-small pink" id="notification-button" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="true"><i class="fas fa-bell"></i></button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="notification-button" id="notifications-popup">
+        No notifications
+      </ul>
+    </span>
+        <span class="dropdown">
+    <button class="circle-small pink dropdown-toggle" data-toggle="dropdown" id="settings-button" aria-haspopup="true"
+            aria-expanded="false"><i class="fas fa-cog"></i></button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="settings-button">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="editProfile" data-toggle="modal"
+                                   data-target="#editProfileModal">Edit Profile</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="changePassword" data-toggle="modal"
+                                   data-target="#changePasswordModal">Change Password</a></li>
+        <li role="presentation" class="divider"></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="logoutButton" data-toggle="modal"
+                                   data-target="#logoutConfirmationModal">Logout</a></li>
+      </ul>
+    </span>
+        <img src="{{ user.image.url }}" class="circle-small" alt="profile">
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "{% url 'core:api:notifications' user.pk %}",
+            type: "get",
+            success: function (data) {
+                localStorage.setItem("{{ user.pk }}-notifications", data.length);
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    html += '<li role="presentation"><a role="menuitem" tabindex="-1" href="' + data[i].url + '">';
+                    html += '<img src="' + data[i].by.image + '" class="circle-small" alt="' + data[i].by.full_name + '">';
+                    html += data[i].by.full_name;
+                    if (data[i].type === "friend_request") {
+                        html += " sent you a friend request";
+                    } else if (data[i].type === "post_like") {
+                        html += " liked your post";
+                    } else if (data[i].type === "post_comment") {
+                        html += " commented on your post";
+                    } else if (data[i].type === "post_share") {
+                        html += " shared your post";
+                    }
+                    html += "</a></li>";
+                    $("#notification-button").addClass("has_before");
+                }
+                if (html === "") {
+                    html = '<li role="presentation"><a role="menuitem" tabindex="-1" href="#">No new notifications</a></li>'
+                }
+                $("#notifications-popup").html(html);
+            }
+        })
+        setInterval(function () {
+            $.ajax({
+                url: "{% url 'core:api:notifications' user.pk %}",
+                type: "get",
+                success: function (data) {
+                    if (localStorage.getItem("{{ user.pk }}-notifications") === null || localStorage.getItem("{{ user.pk }}-notifications") < data.length) {
+                        localStorage.setItem("{{ user.pk }}-notifications", data.length);
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {
+                            html += '<li role="presentation"><a role="menuitem" tabindex="-1" href="' + data[i].url + '">';
+                            html += '<img src="' + data[i].by.image + '" class="circle-small" alt="' + data[i].by.full_name + '">';
+                            html += data[i].by.full_name;
+                            if (data[i].type === "friend_request") {
+                                html += " sent you a friend request";
+                            } else if (data[i].type === "post_like") {
+                                html += " liked your post";
+                            } else if (data[i].type === "post_comment") {
+                                html += " commented on your post";
+                            } else if (data[i].type === "post_share") {
+                                html += " shared your post";
+                            }
+                            html += "</a></li>";
+                            $("#notification-button").addClass("has_before");
+                        }
+                        if (html === "") {
+                            $("#notification-button").removeClass("has_before");
+                            html = '<li role="presentation"><a role="menuitem" tabindex="-1" href="#">No new notifications</a></li>'
+                        }
+                        $("#notifications-popup").html(html);
+                    }
+                }
+            })
+        }, 10000);
+
+        $("#search-Field").keyup(function (e) {
+            if ($(this).val().length > 2) {
+                $.ajax({
+                    url: "{% url 'core:api:search' %}",
+                    type: "POST",
+                    data: {
+                        query: $(this).val()
+                    },
+                    success: function (data) {
+                        $(".search-results").css("display", "inline-block");
+                        var html = "";
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                var user = data[i];
+                                html += '<div class="user_search">';
+                                html += '<a class="search-link" href="#">';
+                                html += '<img src="'+ user.image +'" class="circle-small" alt="profile"> ' + user.full_name;
+                                html += ' <span class="user-search-location">' + user.city + ", "+ user.country + '</span>'
+                                html += "</a>";
+                                html += "</div>";
+                            }
+                            $(".search-results").html(html);
+                        } else {
+                            $(".search-results").html('<span class="no-results">No results</span>');
+                        }
+                    }
+                })
+            } else {
+                $(".search-results").css("display", "none");
+            }
+        });
+        $("#search-Field").focusout(function () {
+            $(".search-results").css("display", "none");
+        })
+    })
+</script>

@@ -1,0 +1,80 @@
+.velyria-navbar-container {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 10px 40px;
+  position: fixed;
+  width: 100%;
+  display: block;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  background-color: #F2F2F2;
+}
+.velyria-navbar-container .nav-left-content #search-Field {
+  width: 25%;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  padding: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.velyria-navbar-container .nav-left-content .search-results {
+  position: absolute;
+  z-index: 10;
+  background-color: white;
+  display: none;
+  margin-top: 5px;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 290px;
+  overflow: auto;
+  min-width: 300px;
+}
+.velyria-navbar-container .nav-left-content .search-results .user_search {
+  margin: 10px;
+}
+.velyria-navbar-container .nav-left-content .search-results .user_search .search-link {
+  font-size: 16px;
+  color: black;
+  text-decoration: none;
+}
+.velyria-navbar-container .nav-left-content .search-results .user_search .search-link .user-search-location {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+}
+.velyria-navbar-container .nav-left-content .search-results .no-results {
+  display: block;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+}
+.velyria-navbar-container .nav-right-content {
+  float: right;
+  margin-top: -40px;
+}
+.velyria-navbar-container .nav-right-content .dropdown .dropdown-menu {
+  top: 40px;
+  left: -100px;
+}
+.velyria-navbar-container .nav-right-content .dropdown #notifications-popup {
+  left: -200px;
+  max-height: 295px;
+  overflow: auto;
+}
+.velyria-navbar-container .nav-right-content .dropdown #notifications-popup li {
+  margin: 10px 0;
+}
+.velyria-navbar-container .nav-right-content .dropdown #notifications-popup img {
+  margin-right: 10px;
+}
+.has_before::before {
+  position: absolute;
+  display: block;
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+  border: 2px solid white;
+  top: -75%;
+  right: 0;
+}
+/*# sourceMappingURL=navbar.css.map */

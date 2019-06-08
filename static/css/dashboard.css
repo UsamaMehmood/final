@@ -1,0 +1,67 @@
+#dashboard {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+#dashboard .main-section {
+  position: relative;
+  margin-top: 70px;
+}
+#dashboard .main-section .posts-container {
+  padding: 15px;
+}
+#dashboard .main-section .posts-container .write-post {
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  margin-bottom: 25px;
+  padding: 10px;
+  background-color: white;
+}
+#dashboard .main-section .posts-container .write-post .post-avatar {
+  margin-top: -35px;
+}
+#dashboard .main-section .posts-container .write-post .post {
+  max-height: 200px;
+  overflow: auto;
+  margin-bottom: 15px;
+  outline: none;
+  font-size: 16px;
+}
+#dashboard .main-section .others-container {
+  padding: 15px;
+}
+#dashboard .main-section .others-container .friends-suggestions-container {
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  margin-bottom: 25px;
+  padding: 10px;
+  background-color: white;
+}
+#dashboard .main-section .others-container .friends-suggestions-container .friends-suggestion-title {
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+}
+#dashboard .main-section .others-container .friends-suggestions-container .friend-suggestion {
+  padding: 5px 10px;
+}
+#dashboard .main-section .others-container .friends-suggestions-container .friend-suggestion .friend-name {
+  font-weight: bold;
+  padding-left: 5px;
+}
+#dashboard .main-section .others-container .friends-suggestions-container .more-friends {
+  text-align: center;
+}
+#dashboard .share-message {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+.modal-header .modal-title {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+}
+.modal-header .close {
+  margin-top: -25px !important;
+}
+/*# sourceMappingURL=dashboard.css.map */

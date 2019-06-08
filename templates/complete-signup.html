@@ -1,0 +1,57 @@
+{% extends 'skeleton/base.html' %}
+{% load static %}
+{% block page_title %}{{ user.first_name }} - Complete signup{% endblock %}
+{% block body_id %}completeSignup{% endblock %}
+{% block page_styles %}
+    <link rel="stylesheet" href="{% static 'css/complete-signup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include 'components/header.html' %}
+    <div class="container main-section">
+        <div class="row">
+            <form class="velyria-form" method="post" id="completeSignupForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="col-md-4">
+                        <div class="form-field {% if field.name == 'profile_picture' %}is-filled{% endif %}">
+                            <label class="field-label">{{ field.label }}</label>
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if suggested_friends %}
+                    <div class="friends_suggestion_section">
+                        <h3>Suggested friends</h3>
+                        {% for friend in suggested_friends %}
+
+                            <div class="friend_suggestion">
+                        <span class="left-side">
+                            <img src="{{ friend.image.url }}" alt="{{ friend.name }}" class="circle-small">
+                            <a href="#">{{ friend.name }}</a>
+                        </span>
+                                <button class="button-pink to-right friend_request_button" data-from="{{ user.pk }}" data-to="{{ friend.pk }}">Send request</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <input type="submit" value="save" class="button-pink to-right" id="saveButton">
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_scripts %}
+
+    <script>
+        $(".friend_request_button").click(function (e) {
+            e.preventDefault();
+            send_friend_request(e.target, "{% url 'core:api:send_friend_request' %}");
+        })
+    </script>
+
+{% endblock %}
