@@ -41,7 +41,6 @@
             src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
             integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
             crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
 
     <!--  custom js-->
@@ -189,26 +188,26 @@
         })
     });
 
-    $("#edit_profile_button").on("click", function (e) {
-        var first_name = $("#first_name").val();
-        var last_name = $("#last_name").val();
-        var dob = $("#dob").val();
-        var email = $("#email").val();
-
-        $.ajax({
-            url: "{% url 'core:api:edit-profile' user.pk %}",
-            type: "post",
-            data: {
-                first_name: first_name,
-                last_name: last_name,
-                dob: dob,
-                email: email
-            },
-            success: function (data) {
-                showAlert("Profile edited successfully! Login again to apply changes");
-            }
-        })
-    })
+    {#$("#edit_profile_button").on("click", function (e) {#}
+    {#    var first_name = $("#first_name").val();#}
+    {#    var last_name = $("#last_name").val();#}
+    {#    var dob = $("#dob").val();#}
+    {#    var email = $("#email").val();#}
+    {##}
+    {#    $.ajax({#}
+    {#        url: "{% url 'core:api:edit-profile' user.pk %}",#}
+    {#        type: "post",#}
+    {#        data: {#}
+    {#            first_name: first_name,#}
+    {#            last_name: last_name,#}
+    {#            dob: dob,#}
+    {#            email: email#}
+    {#        },#}
+    {#        success: function (data) {#}
+    {#            showAlert("Profile edited successfully! Login again to apply changes");#}
+    {#        }#}
+    {#    })#}
+    {#})#}
 </script>
 </body>
 </html>

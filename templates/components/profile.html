@@ -3,18 +3,10 @@
     <div class="profile-background" id="profile-background-particle"></div>
     <div class="profile-foreground">
         <img src="{{ MEDIA_URL }}{{ user.image.url }}" class="circle-large" alt="profile">
-        <h4 class="profile-name">{{ user.first_name }} {{ user.last_name }}</h4>
+        <h4 class="profile-name">{{ user.name }}</h4>
         <p class="profile-location">{{ user.city }}, {{ user.country }}</p>
         <p class="profile-friends">{{ user.friends.count }} Friends</p>
         <a class="profile-link" href="{% url 'core:friends-suggestions' %}">Find more?</a>
     </div>
 </div>
-<script defer="defer">
-    $(document).ready(function () {
-        setTimeout(function () {
-            particlesJS.load('profile-background-particle', '{% static 'js/vendor/particles-config.json' %}', function () {
-                console.log('callback - particles.js config loaded');
-            });
-        }, 500)
-    })
-</script>
+

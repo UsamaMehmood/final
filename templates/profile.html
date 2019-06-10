@@ -1,34 +1,52 @@
 {% extends 'skeleton/base.html' %}
 {% load static %}
 {% load extras %}
-{% block page_title %}Dashboard - {{ user.name }}{% endblock %}
+{% block page_title %}{{ obj.name }}{% endblock %}
+{% block body_id %}profile{% endblock %}
 {% block page_styles %}
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'css/post.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 {% endblock %}
-{% block body_id %}dashboard{% endblock %}
 
 {% block content %}
     {% include 'components/header.html' %}
-    <div class="container main-section">
+    <div class="profile-heading" id="profile-background-particle">
+        <span class="user-info">
+            <img src="{{ obj.image.url }}" alt="{{ obj.name }}" class="circle-large profile-image">
+        <h3 class="user-name">{{ obj.name }}</h3>
+        </span>
+    </div>
+    <div class="container-fluid main-section">
         <div class="row">
-            <div class="col-md-3 profile-section-container">
-                {% include 'components/profile.html' %}
+            <div class="col-md-6">
+                <div class="white-and-shadowed biography">
+                    <h3><strong>About {% if obj.gender == 'male' %}him{% else %}her{% endif %}</strong></h3>
+                    <p class="user-info"><strong>Date of birth: </strong>{{ obj.date_of_birth }}</p>
+                    <p class="user-info"><strong>Gender: </strong>{% if obj.gender == 'male' %}Male{% else %}
+                        Female{% endif %}</p>
+                    <p class="user-info"><strong>Email: </strong>{{ obj.email }}</p>
+                    <p class="user-info"><strong>City: </strong>{{ obj.city }}</p>
+                    <p class="user-info"><strong>Country: </strong>{{ obj.country }}</p>
+                    {% if obj != user and not is_friend %}
+                        <button class="button-pink">Send request</button>
+                    {% endif %}
+                </div>
+                {% if obj != user and mutual_friends %}
+                    <div class="white-and-shadowed mutual-friends">
+                        <h3><strong>Mutual friends</strong></h3>
+                        {% for friend in mutual_friends %}
+                            <div class="friend-section">
+                                <img src="{{ friend.image.url }}" alt="{{ friend.name }}" class="circle-small">
+                                <a class="friend-name" href="{% url 'core:profile' friend.pk %}">{{ friend.first_name }}
+                                    <br />{{ friend.last_name }}</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             <div class="col-md-6 posts-container">
-                <div class="write-post" id="top">
-                    <img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">
-                    <div contenteditable class="post" id="caption">Write a post...</div>
-                    <input type="file" style="display: none" id="file_upload">
-                    <input type="radio" name="status" class="status" value="public" id="public" checked> <label
-                        for="public">Public</label>
-                    <input type="radio" name="status" class="status" value="private" id="private"> <label for="private">Private</label>
-                    <br>
-                    <button class="button-pink" onclick="uploadFile()">Upload image</button>
-                    <button class="button-pink" id="createPost">Post</button>
-                </div>
                 {% for post in posts %}
                     <div class="post-container">
                         <div class="poster-info">
@@ -75,7 +93,8 @@
                                         <img src="{{ comment.commenter.image.url }}" class="circle-small post-avatar"
                                              alt="profile">
                                         <div class="comment-content">
-                                            <a class="commenter-name" href="{% url 'core:profile' comment.commenter.pk %}">{{ comment.commenter.name }}</a>
+                                            <a class="commenter-name"
+                                               href="{% url 'core:profile' comment.commenter.pk %}">{{ comment.commenter.name }}</a>
                                             <span class="comment-message">{{ comment.message }}</span>
                                         </div>
                                     </div>
@@ -85,51 +104,15 @@
                     </div>
                 {% endfor %}
             </div>
-            {% if suggested_friends.count > 0 %}
-                <div class="col-md-3 others-container">
-                    <div class="friends-suggestions-container">
-                        {% include 'components/friends-sugestions.html' %}
-                    </div>
-                </div>
-            {% endif %}
         </div>
     </div>
-
 {% endblock %}
 
 {% block page_scripts %}
-
+    <script src="{% static 'js/vendor/particles.js' %}"></script>
     <script>
         $(document).ready(function () {
-            $("#createPost").on("click", function (e) {
-                var caption = $("#caption").text();
-                var file = $("#file_upload")[0].files[0];
-                var status = $("input[name='status']:checked").val();
-                if (file !== undefined && file.type.indexOf("image") >= 0) {
-                    var fileReader = new FileReader();
-                    fileReader.onload = function (fileLoadedEvent) {
-                        file = fileReader.result;
-                    };
-                    fileReader.readAsDataURL(file);
-                } else {
-                    file = "";
-                }
-                if (caption === "Write a post..." || caption === "") {
-                    return;
-                }
-
-                setTimeout(function () {
-                    $.ajax({
-                        url: "{% url 'core:api:create-post' %}",
-                        type: "POST",
-                        data: {caption: caption, image: file, status: status, post_by: "{{ user.pk }}"},
-                        success: function () {
-                            $("#caption").text("Write a post...");
-                            location.reload();
-                        }
-                    })
-                }, 1000);
-            });
+            particlesJS.load('profile-background-particle', '{% static 'js/vendor/particles-config.json' %}');
             $(".like").on('click', function (e) {
                 var elem = $(e.target);
                 var post_id = elem.data("post-id");
@@ -200,7 +183,10 @@
                 var post_id = $(e.target).data("post-id");
                 $("#post_id").val(post_id);
             });
+            $(".friend_request_button").click(function (e) {
+                e.preventDefault();
+                send_friend_request(e.target, "{% url 'core:api:send_friend_request' %}");
+            })
         })
     </script>
-
 {% endblock %}

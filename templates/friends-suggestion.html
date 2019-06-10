@@ -22,7 +22,7 @@
                         <div class="friend_suggestion">
                         <span class="left-side">
                             <img src="{{ friend.image.url }}" alt="{{ friend.name }}" class="circle-small">
-                            <a href="#" class="profile-link">{{ friend.name }}</a>
+                            <a href="{% url 'core:profile' friend.pk %}" class="profile-link">{{ friend.name }}</a>
                             <span class="location">{{ friend.city }}, {{ friend.country }}</span>
                         </span>
                             <button class="button-pink to-right friend_request_button" data-from="{{ user.pk }}"
@@ -38,7 +38,7 @@
                         <div class="friend_suggestion">
                         <span class="left-side">
                             <img src="{{ friend.image.url }}" alt="{{ friend.name }}" class="circle-small">
-                            <a href="#" class="profile-link">{{ friend.name }}</a>
+                            <a href="{% url 'core:profile' friend.pk %}" class="profile-link">{{ friend.name }}</a>
                             <span class="location">{{ friend.city }}, {{ friend.country }}</span>
                         </span>
                             <button class="button-pink to-right friend_request_button" data-from="{{ user.pk }}"
@@ -48,6 +48,7 @@
                     {% endfor %}
                 </div>
             {% else %}
+            {% endif %}
             </div>
         </div>
     </div>

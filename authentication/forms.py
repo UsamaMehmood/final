@@ -25,6 +25,8 @@ class LoginForm(forms.Form):
 
 
 class CompleteSignup(forms.Form):
+    CHOICES = (('male', 'Male'), ('female', 'Female'))
     profile_picture = forms.ImageField(widget=forms.FileInput(attrs={'class': 'field'}), required=False)
     city = forms.CharField(widget=forms.TextInput(attrs={'class': 'field'}))
     country = forms.CharField(widget=forms.TextInput(attrs={'class': 'field'}))
+    gender = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class': 'field'}))

@@ -35,6 +35,7 @@ def custom_upload_url(instance, _filename):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    GENDER_CHOICES = [('male', 'Male'), ('female', 'Female')]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     email = models.CharField(max_length=128, verbose_name="Email", unique=True)
     password = models.CharField(max_length=12, verbose_name="Password")
@@ -51,6 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     notifications = models.ManyToManyField('core.Notification')
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=6, default='male')
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'

@@ -1,0 +1,52 @@
+#profile {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+#profile .profile-heading {
+  background-color: #d81b60;
+  padding: 15px 0 0 0;
+  height: 175px;
+  position: relative;
+  margin-top: 60px;
+}
+#profile .profile-heading h3 {
+  color: white;
+  font-weight: bold;
+}
+#profile .profile-heading .user-info {
+  text-align: center;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+#profile .main-section {
+  position: relative;
+  margin-top: 20px;
+}
+#profile .main-section .white-and-shadowed {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  margin: 10px;
+}
+#profile .main-section .white-and-shadowed h3 {
+  margin: 0;
+  padding-bottom: 20px;
+}
+#profile .main-section .white-and-shadowed .friend-section {
+  display: inline-block;
+  text-align: center;
+  width: 80px;
+  font-weight: bold;
+}
+#profile .main-section .white-and-shadowed .friend-section a {
+  color: black;
+  display: block;
+  text-decoration: none;
+  margin-top: 10px;
+}
+#profile .main-section .post-container {
+  margin-top: 10px;
+}
+/*# sourceMappingURL=profile.css.map */

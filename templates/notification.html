@@ -21,7 +21,7 @@
                 {% if notification.type == "friend_request" %}
                     <div class="friend_request"><img class="circle-small" src="{{ notification.by.image.url }}"
                                                      alt="{{ notification.by.name }}">
-                        <a class="profile-link" href="#">{{ notification.by.name }}</a> sent you a friend request
+                        <a class="profile-link" href="{% url 'core:profile' notification.by.pk %}">{{ notification.by.name }}</a> sent you a friend request
                     </div>
                     <form method="post">
                         {% csrf_token %}
@@ -39,7 +39,7 @@
                             <img src="{{ notification.post_id.poster.image.url }}" class="circle-small post-avatar"
                                  alt="{{ notification.post_id.poster.name }}">
                             <span class="poster-content">
-            <a class="poster-name">{{ notification.post_id.poster.name }}</a><br/><span
+            <a class="poster-name" href="{% url 'core:profile' notification.post_id.poster.pk %}">{{ notification.post_id.poster.name }}</a><br/><span
                                     class="poster-location">{{ notification.post_id.poster.city }}, {{ notification.post_id.poster.country }}</span>
           </span>
                         </div>
@@ -80,7 +80,7 @@
                                         <img src="{{ comment.commenter.image.url }}" class="circle-small post-avatar"
                                              alt="profile">
                                         <div class="comment-content">
-                                            <a class="commenter-name" href="#">{{ comment.commenter.name }}</a>
+                                            <a class="commenter-name" href="{% url 'core:profile' comment.commenter.pk %}">{{ comment.commenter.name }}</a>
                                             <span class="comment-message">{{ comment.message }}</span>
                                         </div>
                                     </div>
@@ -151,7 +151,7 @@
                     var html = '<div class="comment">';
                     html += '<img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">';
                     html += '<div class="comment-content">';
-                    html += '<a class="commenter-name" href="#">{{ user.name }} </a>';
+                    html += '<a class="commenter-name" href="{% url 'core:profile' user.pk %}">{{ user.name }} </a>';
                     html += '<span class="comment-message">' + comment + '</span>';
                     html += '</div></div>';
                     html = html + comment_section.html();

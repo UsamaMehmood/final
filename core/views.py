@@ -37,7 +37,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         suggested_friends = []
         for i in range(5):
-            random_index = randint(0, users.count())
+            random_index = randint(0, users.count()-1)
             suggested_friends.append(users[random_index])
 
         context['suggested_friends'] = suggested_friends
@@ -111,4 +111,32 @@ class FriendsSuggestionView(LoginRequiredMixin, TemplateView):
                 friends_of_friends.append(sub_friends)
 
         context['friends_of_friends'] = friends_of_friends
+        return context
+
+
+class ProfileView(LoginRequiredMixin, DetailView):
+    template_name = 'profile.html'
+    model = User
+    context_object_name = 'obj'
+    login_url = reverse_lazy('auth:login')
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        posts_current_user = Post.objects.filter(poster=context['obj'])
+        if context['obj'] not in self.request.user.friends.all():
+            posts_current_user = posts_current_user.filter(public=True)
+
+        context['posts'] = posts_current_user
+
+        is_friend = context['obj'] in self.request.user.friends.all()
+        friend_request_sent = self.request.user.notifications.filter(by=context['obj'], seen=False) \
+                              or context['obj'].notifications.filter(by=self.request.user, seen=False)
+        context['is_friend'] = is_friend or friend_request_sent
+
+        mutual_friends = []
+        for friend in context['obj'].friends.all():
+            if friend in self.request.user.friends.all():
+                mutual_friends.append(friend)
+
+        context['mutual_friends'] = mutual_friends
         return context

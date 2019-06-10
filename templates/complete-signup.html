@@ -16,7 +16,7 @@
             <form class="velyria-form" method="post" id="completeSignupForm" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% for field in form %}
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-field {% if field.name == 'profile_picture' %}is-filled{% endif %}">
                             <label class="field-label">{{ field.label }}</label>
                             {{ field }}
@@ -32,7 +32,7 @@
                             <div class="friend_suggestion">
                         <span class="left-side">
                             <img src="{{ friend.image.url }}" alt="{{ friend.name }}" class="circle-small">
-                            <a href="#">{{ friend.name }}</a>
+                            <a href="{% url 'core:profile' friend.pk %}">{{ friend.name }}</a>
                         </span>
                                 <button class="button-pink to-right friend_request_button" data-from="{{ user.pk }}" data-to="{{ friend.pk }}">Send request</button>
                             </div>

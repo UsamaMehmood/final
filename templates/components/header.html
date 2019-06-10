@@ -116,9 +116,9 @@
                             for (var i = 0; i < data.length; i++) {
                                 var user = data[i];
                                 html += '<div class="user_search">';
-                                html += '<a class="search-link" href="#">';
+                                html += '<a class="search-link" href="/user/profile/"' + user.pk + '>';
                                 html += '<img src="'+ user.image +'" class="circle-small" alt="profile"> ' + user.full_name;
-                                html += ' <span class="user-search-location">' + user.city + ", "+ user.country + '</span>'
+                                html += ' <span class="user-search-location">' + user.city + ", "+ user.country + '</span>';
                                 html += "</a>";
                                 html += "</div>";
                             }
