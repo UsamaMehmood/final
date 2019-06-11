@@ -213,8 +213,6 @@ class EditProfileApi(APIView):
         if email == '':
             email = user.email
 
-        dob = datetime(dob).strftime("YYYY-MM-DD")
-
         try:
             user.first_name = first_name
             user.last_name = last_name
@@ -222,6 +220,31 @@ class EditProfileApi(APIView):
             user.email = email
             user.save()
         except:
-            return Response({"status": "failed"})
+            return Response({"result": "failed"})
 
-        return Response({"status": "success"})
+        return Response({"result": "success"})
+
+
+class ChangePasswordApi(APIView):
+    http_method_names = ['post']
+    authentication_classes = []
+
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super(ChangePasswordApi, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *_args, **kwargs):
+        user = User.objects.get(pk=kwargs.get("pk"))
+        password = request.POST.get("password", user.password)
+        confirm = request.POST.get("confirm", user.password)
+
+        if password != confirm:
+            return Response({"result": "failed"})
+
+        try:
+            user.set_password(password)
+            user.save()
+        except:
+            return Response({"result": "failed"})
+
+        return Response({"result": "success"})

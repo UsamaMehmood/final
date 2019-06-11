@@ -13,6 +13,8 @@
     <div class="nav-right-content">
         <button class="circle-small pink"><a href="{% url 'core:dashboard' %}"><i class="fas fa-house-damage"></i></a>
         </button>
+        <button class="circle-small pink"><a href="{% url 'core:profile' user.pk %}"><i class="fas fa-user"></i></a>
+        </button>
         <span class="dropdown">
       <button class="circle-small pink" id="notification-button" data-toggle="dropdown" aria-haspopup="true"
               aria-expanded="true"><i class="fas fa-bell"></i></button>

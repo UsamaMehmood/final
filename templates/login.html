@@ -28,7 +28,7 @@
                             </div>
                             {% endfor %}
                             <input class="button-pink margin-left-10" type="submit" value="Login">
-                            <a class="link" href="{% url 'index' %}">Don't have an account?</a>
+                            <a class="link" href="{% url 'auth:register' %}">Don't have an account?</a>
                         {{ form.non_field_errors }}
                         </form>
                     </div>

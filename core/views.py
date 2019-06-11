@@ -105,12 +105,17 @@ class FriendsSuggestionView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(FriendsSuggestionView, self).get_context_data(**kwargs)
         user_friends_ids = self.request.user.friends.values_list('id', flat=True)
-        friends_of_friends = []
-        for friend in self.request.user.friends.all():
-            for sub_friends in friend.friends.exclude(id__in=user_friends_ids).exclude(id=self.request.user.id):
-                friends_of_friends.append(sub_friends)
+        context['nearby_friends'] = User.objects.filter(
+            Q(city=self.request.user.city) | Q(country=self.request.user.country))\
+            .distinct().exclude(id__in=user_friends_ids).exclude(id=self.request.user.id)
 
-        context['friends_of_friends'] = friends_of_friends
+        ids = []
+        for friend in self.request.user.friends.all():
+            for id in friend.friends.all().values_list('id', flat=True):
+                if id not in ids:
+                    ids.append(id)
+
+        context['friends_of_friends'] = User.objects.filter(id__in=ids).distinct().exclude(id=self.request.user.id)
         return context
 
 

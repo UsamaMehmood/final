@@ -15,12 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from authentication.views import SignUpView
+from core.views import DashboardView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', SignUpView.as_view(), name="index"),
+    path('', DashboardView.as_view(), name="index"),
     path('auth/', include('authentication.urls', namespace="auth")),
     path('user/', include('core.urls', namespace="core")),
     path('admin/', admin.site.urls),

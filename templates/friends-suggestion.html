@@ -25,9 +25,6 @@
                             <a href="{% url 'core:profile' friend.pk %}" class="profile-link">{{ friend.name }}</a>
                             <span class="location">{{ friend.city }}, {{ friend.country }}</span>
                         </span>
-                            <button class="button-pink to-right friend_request_button" data-from="{{ user.pk }}"
-                                    data-to="{{ friend.pk }}">Send request
-                            </button>
                         </div>
                     {% endfor %}
                 </div>
@@ -41,9 +38,6 @@
                             <a href="{% url 'core:profile' friend.pk %}" class="profile-link">{{ friend.name }}</a>
                             <span class="location">{{ friend.city }}, {{ friend.country }}</span>
                         </span>
-                            <button class="button-pink to-right friend_request_button" data-from="{{ user.pk }}"
-                                    data-to="{{ friend.pk }}">Send request
-                            </button>
                         </div>
                     {% endfor %}
                 </div>
