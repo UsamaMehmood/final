@@ -63,7 +63,7 @@
                                     class="fas fa-share"></i> Share
                             </button>
                         </div>
-                        <div class="comments-section">
+                        <div class="comments-section {% if post.comments.all.count > 3 %}hide-comments{% endif %}">
                             <div class="my-comment">
                                 <img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">
                                 <input class="write-comment" type="text" placeholder="write a comment"
@@ -75,13 +75,17 @@
                                         <img src="{{ comment.commenter.image.url }}" class="circle-small post-avatar"
                                              alt="profile">
                                         <div class="comment-content">
-                                            <a class="commenter-name" href="{% url 'core:profile' comment.commenter.pk %}">{{ comment.commenter.name }}</a>
+                                            <a class="commenter-name"
+                                               href="{% url 'core:profile' comment.commenter.pk %}">{{ comment.commenter.name }}</a>
                                             <span class="comment-message">{{ comment.message }}</span>
                                         </div>
                                     </div>
                                 {% endfor %}
                             </div>
                         </div>
+                        {% if post.comments.all.count > 3 %}
+                            <div class="show-more">show {{ post.comments.all.count|add:'-3' }} more</div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
@@ -200,6 +204,11 @@
                 var post_id = $(e.target).data("post-id");
                 $("#post_id").val(post_id);
             });
+
+            $(".show-more").on("click", function () {
+                $(this).siblings(".comments-section").removeClass("hide-comments");
+                $(this).hide();
+            })
         })
     </script>
 

@@ -40,7 +40,7 @@
                             <div class="friend-section">
                                 <img src="{{ friend.image.url }}" alt="{{ friend.name }}" class="circle-small">
                                 <a class="friend-name" href="{% url 'core:profile' friend.pk %}">{{ friend.first_name }}
-                                    <br />{{ friend.last_name }}</a>
+                                    <br/>{{ friend.last_name }}</a>
                             </div>
                         {% endfor %}
                     </div>
@@ -81,7 +81,7 @@
                                     class="fas fa-share"></i> Share
                             </button>
                         </div>
-                        <div class="comments-section">
+                        <div class="comments-section {% if post.comments.all.count > 3 %}hide-comments{% endif %}">
                             <div class="my-comment">
                                 <img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">
                                 <input class="write-comment" type="text" placeholder="write a comment"
@@ -101,6 +101,9 @@
                                 {% endfor %}
                             </div>
                         </div>
+                        {% if post.comments.all.count > 3 %}
+                            <div class="show-more">show {{ post.comments.all.count|add:'-3' }} more</div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
@@ -186,6 +189,10 @@
             $(".friend_request_button").click(function (e) {
                 e.preventDefault();
                 send_friend_request(e.target, "{% url 'core:api:send_friend_request' %}");
+            })
+            $(".show-more").on("click", function () {
+                $(this).siblings(".comments-section").removeClass("hide-comments");
+                $(this).hide();
             })
         })
     </script>

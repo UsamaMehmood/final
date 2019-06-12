@@ -21,7 +21,9 @@
                 {% if notification.type == "friend_request" %}
                     <div class="friend_request"><img class="circle-small" src="{{ notification.by.image.url }}"
                                                      alt="{{ notification.by.name }}">
-                        <a class="profile-link" href="{% url 'core:profile' notification.by.pk %}">{{ notification.by.name }}</a> sent you a friend request
+                        <a class="profile-link"
+                           href="{% url 'core:profile' notification.by.pk %}">{{ notification.by.name }}</a> sent you a
+                        friend request
                     </div>
                     <form method="post">
                         {% csrf_token %}
@@ -39,7 +41,8 @@
                             <img src="{{ notification.post_id.poster.image.url }}" class="circle-small post-avatar"
                                  alt="{{ notification.post_id.poster.name }}">
                             <span class="poster-content">
-            <a class="poster-name" href="{% url 'core:profile' notification.post_id.poster.pk %}">{{ notification.post_id.poster.name }}</a><br/><span
+            <a class="poster-name"
+               href="{% url 'core:profile' notification.post_id.poster.pk %}">{{ notification.post_id.poster.name }}</a><br/><span
                                     class="poster-location">{{ notification.post_id.poster.city }}, {{ notification.post_id.poster.country }}</span>
           </span>
                         </div>
@@ -68,7 +71,7 @@
                                     class="fas fa-share"></i> Share
                             </button>
                         </div>
-                        <div class="comments-section">
+                        <div class="comments-section {% if notification.post_id.comments.all.count > 3 %}hide-comments{% endif %}">
                             <div class="my-comment">
                                 <img src="{{ user.image.url }}" class="circle-small post-avatar" alt="profile">
                                 <input class="write-comment" type="text" placeholder="write a comment"
@@ -80,13 +83,17 @@
                                         <img src="{{ comment.commenter.image.url }}" class="circle-small post-avatar"
                                              alt="profile">
                                         <div class="comment-content">
-                                            <a class="commenter-name" href="{% url 'core:profile' comment.commenter.pk %}">{{ comment.commenter.name }}</a>
+                                            <a class="commenter-name"
+                                               href="{% url 'core:profile' comment.commenter.pk %}">{{ comment.commenter.name }}</a>
                                             <span class="comment-message">{{ comment.message }}</span>
                                         </div>
                                     </div>
                                 {% endfor %}
                             </div>
                         </div>
+                        {% if notification.post_id.comments.all.count > 3 %}
+                            <div class="show-more">show {{ notification.post_id.comments.all.count|add:'-3' }} more</div>
+                        {% endif %}
                     </div>
                 {% endif %}
             </div>
@@ -175,6 +182,10 @@
                 var post_id = $(e.target).data("post-id");
                 $("#post_id").val(post_id);
             });
+            $(".show-more").on("click", function () {
+                $(this).siblings(".comments-section").removeClass("hide-comments");
+                $(this).hide();
+            })
         })
     </script>
 

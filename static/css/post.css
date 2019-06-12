@@ -58,6 +58,15 @@
 .post-container .post-actions .is-liked {
   color: #d81b60 !important;
 }
+.post-container .hide-comments {
+  height: 150px;
+  overflow: hidden;
+}
+.post-container .show-more {
+  color: blue;
+  cursor: pointer;
+  text-align: right;
+}
 .post-container .comments-section .my-comment {
   display: none;
 }
