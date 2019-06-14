@@ -51,6 +51,7 @@
                             <span class="post-likes">{{ post.likes.count }} Like(s)</span>
                             <span class="post-shares">{{ post.shares.count }} Share(s)</span>
                         </div>
+                    {% if post.poster in user.friends.all or post.poster == user %}
                         <div class="post-actions">
                             <button class="post-action-button like {% if post|liked_by_user:user %}is-liked{% endif %}"
                                     data-post-id="{{ post.pk }}"><i class="fas fa-thumbs-up"></i> Like
@@ -86,6 +87,7 @@
                         {% if post.comments.all.count > 3 %}
                             <div class="show-more">show {{ post.comments.all.count|add:'-3' }} more</div>
                         {% endif %}
+                    {% endif %}
                     </div>
                 {% endfor %}
             </div>

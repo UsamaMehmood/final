@@ -40,7 +40,7 @@ class NotificationsView(APIView):
 
     def get(self, _request, *_args, **kwargs):
         user = User.objects.get(pk=kwargs.get("user_id"))
-        notifications = NotificationsSerializer(user.notifications.filter(seen=False), many=True).data
+        notifications = NotificationsSerializer(user.notifications.filter(seen=False).exclude(by=user), many=True).data
         return Response(notifications)
 
 

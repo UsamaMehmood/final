@@ -27,7 +27,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        ids = list(self.request.user.friends.all().values_list("pk", flat=True))
+        if not self.request.user.friends.all().exists():
+            ids = list(User.objects.filter(notifications__by=self.request.user, notifications__type='friend_request')
+                       .values_list("pk", flat=True))
+        else:
+            ids = list(self.request.user.friends.all().values_list("pk", flat=True))
         ids.append(self.request.user.pk)
         context['posts'] = Post.objects.filter(poster_id__in=ids).order_by('-created_at')
         users = User.objects.all().order_by("created_at").exclude(id__in=ids)
@@ -66,10 +70,11 @@ class NotificationView(DetailView, LoginRequiredMixin):
 
         suggested_friends = []
         for i in range(5):
-            random_index = randint(0, users.count())
+            random_index = randint(0, users.count() - 1)
             suggested_friends.append(users[random_index])
 
         context['suggested_friends'] = suggested_friends
+        return context
 
     def post(self, request, *args, **kwargs):
         status = request.POST['status']
