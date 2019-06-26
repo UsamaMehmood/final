@@ -11,7 +11,8 @@ from django.db.models import Q
 
 from core.models import Notification, Post, Like, Comment, Share
 from authentication.models import User
-from .serializers import NotificationsSerializer, UserMiniSerializer
+from .serializers import (UserMiniSerializer, UserSerializer, LikeSerializer, CommentSerializer, ShareSerializer,
+                          NotificationsSerializer, PostSerializer)
 
 
 class SendFriendRequest(View):
@@ -248,3 +249,25 @@ class ChangePasswordApi(APIView):
             return Response({"result": "failed"})
 
         return Response({"result": "success"})
+
+
+class PostApi(APIView):
+    http_method_names = ['get', 'post']
+    authentication_classes = []
+    serializer_class = PostSerializer
+
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super(PostApi, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *_args, **_kwargs):
+        post = Post.objects.get(pk=request.GET.get("post_id"))
+        data = PostSerializer(post).data
+        return Response(data, status=200)
+
+    def post(self, request, *_args, **_kwargs):
+        ser = PostSerializer(data=request.POST)
+        if ser.is_valid():
+            return Response({"status": "success", "message": "Post successfully created!"}, status=201)
+
+        return Response({"status": "error", "message": ser.errors})
